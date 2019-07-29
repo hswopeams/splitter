@@ -8,7 +8,7 @@ B9Lab Splitter Project
 4. we can see the balances of Alice, Bob and Carol on the Web page.
 5. Alice can use the Web page to split her ether.
 
-##Notes
+## Notes
 * Contract only. Does not include web page. I will do Module 6 first and then build the web page, as mentioned in the instructions.
 * Since parties are supposed to be able to interact with eacht other anonymously on the blockchain, I assumed the idea of 
   identifying "Alice", "Bob", "Carol" was a red herring. I implemented this using roles. Alice can have the sender role. 
