@@ -1,0 +1,8 @@
+node_modules/
+build/
+truffle-config.js.original
+contracts/Splitter-struct.sol.bak
+contracts/Splitter-Parties.sol.bak
+contracts/Splitter-almost.sol.bak
+contracts/Splitter-names.sol.bak
+test/splitter-almost.js.bak
