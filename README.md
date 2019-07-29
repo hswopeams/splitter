@@ -13,3 +13,4 @@ B9Lab Splitter Project
 * Since parties are supposed to be able to interact with eacht other anonymously on the blockchain, I assumed the idea of 
   identifying "Alice", "Bob", "Carol" was a red herring. I implemented this using roles. Alice can have the sender role. 
   Bob and Carol can have receiver roles.
+* I didn't create a specific function to get the contract balance because web3 standard function can be used for that.
