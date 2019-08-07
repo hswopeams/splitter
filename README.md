@@ -10,7 +10,7 @@ B9Lab Splitter Project
 
 ## Notes
 * Contract only. Does not include web page. I will do Module 6 first and then build the web page, as mentioned in the instructions.
-* Since parties are supposed to be able to interact with eacht other anonymously on the blockchain, I assumed the idea of 
-  identifying "Alice", "Bob", "Carol" was a red herring. I implemented this using roles. Alice can have the sender role. 
-  Bob and Carol can have receiver roles.
-* I didn't create a specific function to get the contract balance because web3 standard function can be used for that.
+* Simplified Splitter.sol as per comments
+* Alice, Bob, and Carol are used as test accounts, but as per comments it is possible for anyone to split or receive.
+* The Split function is also tested with Dan, Ed, and Frank
+* The withdrawFunds test is not working correctly. I managed to calculate transactionFee, but Alice's ending balance is not as expected (old balance - withdraw function call transaction fee + withdrawn amount). I'm not sure why. I only added assertions for Alice at this point because I know something is wrong. If I can get help figuring out what is wrong, I can then add assertions to check Bob and Carol's balances too.
