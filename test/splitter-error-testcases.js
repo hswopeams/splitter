@@ -14,6 +14,7 @@ contract("Splitter Error Test", async accounts => {
     let Alice;
     let Bob;
     let Carol;
+    let ZERO_ADDRESS;
 
     // Runs before all tests in this block.
     before(async () => {
@@ -22,9 +23,11 @@ contract("Splitter Error Test", async accounts => {
         //Set up accounts for parties. In truffel owner = accounts[0]
         Alice = accounts[1]
         Bob = accounts[2]
-        Carol = accounts[3]    
-
+        Carol = accounts[3]  
         Dan = accounts[4]
+
+        ZERO_ADDRESS =  '0x0000000000000000000000000000000000000000';
+
     });
 
     beforeEach(async () => {
@@ -34,7 +37,7 @@ contract("Splitter Error Test", async accounts => {
 
 
     });
-    
+   
     it('should revert when the fallback function is called', async () => {
         await truffleAssert.reverts(
             instance.sendTransaction({
@@ -82,5 +85,19 @@ contract("Splitter Error Test", async accounts => {
        
         
     });
-   
+
+  
+
+    it('should not allow funds to be sent to invalid receiver addresses', async () => {
+        
+        
+        await truffleAssert.reverts(
+            instance.split(ZERO_ADDRESS, ZERO_ADDRESS, {from: Alice, value: 5001} ),
+            "Receiver is the zero address"
+        );
+       
+       
+    });
+
+    
 });//end test contract

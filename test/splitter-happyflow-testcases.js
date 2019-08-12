@@ -168,95 +168,121 @@ contract("Splitter Happy Flow Test", async accounts => {
               
     });
 
-  
-
-    it('should allow Alice, Bob, and Carol to withdraw their funds', async () => {
-        let gasPrice;
-        let gasUsed;
-        let transactionFee;
+   
+    it('should allow Alice to withdraw her funds', async () => {
+        let withdrawGasPrice;
+        let withdrawTxPrice;
+        let withdrawTxReceipt;
+        
         let expectedSplitterBalance = new BN(0);
-        let txHash;
-        let txReceipt;
-        let txPrice;
-
-
-        let startingAccountBalanceAlice = await web3.eth.getBalance(Alice);
-        let startingAccountBalanceBob = await web3.eth.getBalance(Bob);
-        let startingAccountBalanceCarol = await web3.eth.getBalance(Carol);
-
-        console.log("startingAccountBalanceAlice " +startingAccountBalanceAlice);
-        console.log("startingAccountBalanceBob " +startingAccountBalanceBob);
-        console.log("startingAccountBalanceCarol " +startingAccountBalanceCarol);
-
-        let startingSplitterBalanceAlice = await instance._balances(Alice, {from: Alice});
-        let startingSplitterBalanceBob = await instance._balances(Bob, {from: Bob});
-        let startingSplitterBalanceCarol = await instance._balances(Carol, {from: Carol});
-
-        console.log("startingSplitterBalanceAlice", startingSplitterBalanceAlice.toString(10));
-      
-        //we need funds to withdraw
-        let resultSplit = await instance.split(Bob, Carol, {from: Alice, value: 5001} );
        
+        //add some funds to Alice's splitter balance first
+        await instance.split(Bob, Carol, {from: Alice, value: 5001} );
+        
+        let startingAccountBalanceAlice = await web3.eth.getBalance(Alice);
+
         // using promise events
         instance.withdrawFunds.sendTransaction({
             from: Alice,
             to: instance
         })
         .on('transactionHash', function(hash){
-            txHash = hash;
           
             return web3.eth.getTransaction(hash)
-            // .then(console.log)
             .then(transaction => transaction.gasPrice)
-            .then (txGasPrice => {
-                gasPrice = txGasPrice;
-                console.log("gasPrice in getTransaction ", gasPrice);
+            .then(txGasPrice => {
+                withdrawGasPrice = txGasPrice;
             });
            
         })
         .on('receipt', function(receipt){
-            txReceipt = receipt;
-            //console.log("receipt", receipt); 
+            withdrawTxReceipt = receipt;
 
-        })
-        .then( async () => {
-            console.log("txReceipt ", txReceipt);
-          
-            truffleAssert.eventEmitted(txReceipt, 'FundsWithdrawn', (ev) => {
+            truffleAssert.eventEmitted(withdrawTxReceipt, 'FundsWithdrawn', (ev) => {
                 return ev.party == Alice && ev.balanceWithdrawn == 1 && ev.newBalance == 0;
             });
-
-            txPrice = gasPrice * txReceipt.gasUsed;
-            console.log("Transaction Price:", txPrice);
+        })
+        .then( async () => {
+            withdrawTxPrice = withdrawGasPrice * withdrawTxReceipt.gasUsed;
 
             let newSplitterBalanceAlice = await instance._balances(Alice, {from: Alice});
-            console.log("newSplitterBalanceAlice in then", newSplitterBalanceAlice);
             expect(newSplitterBalanceAlice.eq(expectedSplitterBalance)).to.be.true; 
 
-            let newAccountBalanceAlice = await web3.eth.getBalance(Alice);
-            console.log("newAccountBalanceAlice after await ", newAccountBalanceAlice);
-            console.log("startingAccountBalanceAlice is BN ", web3.utils.isBN(startingAccountBalanceAlice));
-            console.log("newAccountBalanceAlice is BN ", web3.utils.isBN(newAccountBalanceAlice));
-
-
-            let expectedAccountBalance = new BN(0);                 
-
-             //New balance = old balance - withdraw function call transaction fee + withdrawn amount.
-            expectedAccountBalance = new BN(startingAccountBalanceAlice) - new BN(txPrice) + new BN(1); //1 should be Alice's remainder of the amount split (5001). The event's balanceWithdrawn confirms this.
-            console.log("expectedAccountBalance", expectedAccountBalance);
            
+            let newAccountBalanceAlice;
+            return web3.eth.getBalance(Alice)
+            .then( balance => {
 
-            //expect(new BN(newAccountBalanceAlice).eq(expectedAccountBalance)).to.be.true; 
-           
-
-        });
-      
-      
-    });
-  
-
-  
+                startingAccountBalanceAlice = web3.utils.toBN(startingAccountBalanceAlice);
+                newAccountBalanceAlice = web3.utils.toBN(balance);
+                withdrawTxPrice = web3.utils.toBN(withdrawTxPrice);
+                let expectedAccountBalance;    
     
+                //Alice balance after calling withdrawFunds() = Alice balance before calling withdrawFunds() plus amount withdrawn minus price of calling withdrawFunds()
+                expectedAccountBalance = startingAccountBalanceAlice.add(web3.utils.toBN(1)).sub(withdrawTxPrice);
+                expect(new BN(newAccountBalanceAlice).eq(new BN(expectedAccountBalance))).to.be.true; 
+            });
+
+        }); 
+    });
+    
+    it('should allow Bob to withdraw his funds', async () => {
+        let withdrawGasPrice;
+        let withdrawTxPrice;
+        let withdrawTxReceipt;
+        
+        let expectedSplitterBalance = new BN(0);
+       
+        //add some funds to Bob's splitter balance first
+        await instance.split(Bob, Carol, {from: Alice, value: 5001} );
+        
+        let startingAccountBalanceBob = await web3.eth.getBalance(Bob);
+        
+        // using promise events
+        instance.withdrawFunds.sendTransaction({
+            from: Bob,
+            to: instance
+        })
+        .on('transactionHash', function(hash){
+            return web3.eth.getTransaction(hash)
+            .then(transaction => transaction.gasPrice)
+            .then(txGasPrice => {
+                withdrawGasPrice = txGasPrice;
+            });
+           
+        })
+        .on('receipt', function(receipt){
+            withdrawTxReceipt = receipt;
+           
+            truffleAssert.eventEmitted(withdrawTxReceipt, 'FundsWithdrawn', (ev) => {
+                return ev.party == Bob && ev.balanceWithdrawn == 2500 && ev.newBalance == 0;
+            });
+        })
+        .then( async () => {
+            withdrawTxPrice = withdrawGasPrice * withdrawTxReceipt.gasUsed;
+
+            let newSplitterBalanceBob = await instance._balances(Bob, {from: Bob});
+            expect(newSplitterBalanceBob.eq(expectedSplitterBalance)).to.be.true; 
+
+           
+            let newAccountBalanceBob;
+            return web3.eth.getBalance(Bob)
+            .then( balance => {
+
+                startingAccountBalanceBob = web3.utils.toBN(startingAccountBalanceBob);
+                newAccountBalanceBob = web3.utils.toBN(balance);
+                withdrawTxPrice = web3.utils.toBN(withdrawTxPrice);
+
+                let expectedAccountBalance;    
+    
+                //Bob balance after calling withdrawFunds() = Bob balance before calling withdrawFunds() plus amount withdrawn minus price of calling withdrawFunds()
+                expectedAccountBalance = startingAccountBalanceBob.add(web3.utils.toBN(2500)).sub(withdrawTxPrice);
+               
+                expect(new BN(newAccountBalanceBob).eq(new BN(expectedAccountBalance))).to.be.true; 
+            });
+
+        }); 
+    });
  
 
 });//end test contract

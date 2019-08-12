@@ -23,7 +23,7 @@ contract Splitter is Ownable, Pausable {
 
 
     function split(address receiver1, address receiver2) public payable whenNotPaused {
-        //require(msg.sender == alice,"Only Alice can split funds");
+        require(receiver1 != address(0) && receiver2 != address(0), "Receiver is the zero address");
 
         uint256 half = SafeMath.div(msg.value,2);
         uint256 remainder = SafeMath.mod(msg.value,2);
@@ -32,16 +32,14 @@ contract Splitter is Ownable, Pausable {
         _balances[msg.sender] = SafeMath.add(_balances[msg.sender],remainder);
         emit FundsSplit(msg.sender, receiver1, receiver2, half);
     }
-        
- 
+
     function withdrawFunds() public whenNotPaused {
         require(_balances[msg.sender] > 0, "No funds available for withdrawal");
         uint256 amount = _balances[msg.sender];
         _balances[msg.sender] = 0;
         emit FundsWithdrawn(msg.sender,amount,_balances[msg.sender]);
         msg.sender.transfer(amount);
-       
+        
     }
-
-    
+ 
 }
