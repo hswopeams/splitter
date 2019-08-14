@@ -16,3 +16,4 @@ B9Lab Splitter Project
 * Added a require to split function to chedk for 0 address;
 * The test case 'should allow Alice to withdraw her funds' now correctly checks Alice's account balance as well as her splitter balance after withdrawing funds
 * The test case 'should allow Bob to withdraw his funds' now correctly checks Bob's account balance as well as his splitter balance after withdrawing funds
+* Made changes according to Xavier's comments
