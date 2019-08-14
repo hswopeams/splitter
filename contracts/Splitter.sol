@@ -12,8 +12,8 @@ contract Splitter is Ownable, Pausable {
     mapping(address => uint256) public _balances;
 
     event DepositReceived(address indexed depositor, uint256 amount);
-    event FundsSplit(address indexed sender, address receiver1, address receiver2,  uint256 amountReceived);
-    event FundsWithdrawn(address indexed party, uint256 balanceWithdrawn, uint256 newBalance);
+    event FundsSplit(address indexed sender, address receiver1, address receiver2,  uint256 amountReceived, uint256 remainingAmountToSender);
+    event FundsWithdrawn(address indexed party, uint256 balanceWithdrawn);
    
     constructor() public {}
 
@@ -25,21 +25,20 @@ contract Splitter is Ownable, Pausable {
     function split(address receiver1, address receiver2) public payable whenNotPaused {
         require(receiver1 != address(0) && receiver2 != address(0), "Receiver is the zero address");
 
-        uint256 half = SafeMath.div(msg.value,2);
-        uint256 remainder = SafeMath.mod(msg.value,2);
-        _balances[receiver1] = SafeMath.add(_balances[receiver1], half);
-        _balances[receiver2] = SafeMath.add(_balances[receiver2], half);
+        uint256 half = msg.value.div(2);
+        uint256 remainder = msg.value.mod(2);
+
+        _balances[receiver1] = _balances[receiver1].add(half);
+        _balances[receiver2] = _balances[receiver2].add(half);
         _balances[msg.sender] = SafeMath.add(_balances[msg.sender],remainder);
-        emit FundsSplit(msg.sender, receiver1, receiver2, half);
+        emit FundsSplit(msg.sender, receiver1, receiver2, half, remainder);
     }
 
     function withdrawFunds() public whenNotPaused {
-        require(_balances[msg.sender] > 0, "No funds available for withdrawal");
         uint256 amount = _balances[msg.sender];
+        require(amount > 0, "No funds available for withdrawal");
         _balances[msg.sender] = 0;
-        emit FundsWithdrawn(msg.sender,amount,_balances[msg.sender]);
+        emit FundsWithdrawn(msg.sender,amount);
         msg.sender.transfer(amount);
-        
     }
- 
 }
