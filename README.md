@@ -12,5 +12,7 @@ B9Lab Splitter Project
 * Contract only. Does not include web page. I will do Module 6 first and then build the web page, as mentioned in the instructions.
 * Simplified Splitter.sol as per comments
 * Alice, Bob, and Carol are used as test accounts, but as per comments it is possible for anyone to split or receive.
-* The Split function is also tested with Dan, Ed, and Frank
-* The withdrawFunds test is not working correctly. I managed to calculate transactionFee, but Alice's ending balance is not as expected (old balance - withdraw function call transaction fee + withdrawn amount). I'm not sure why. I only added assertions for Alice at this point because I know something is wrong. If I can get help figuring out what is wrong, I can then add assertions to check Bob and Carol's balances too.
+* The split function is also tested with Dan, Ed, and Frank
+* Added a require to split function to chedk for 0 address;
+* The test case 'should allow Alice to withdraw her funds' now correctly checks Alice's account balance as well as her splitter balance after withdrawing funds
+* The test case 'should allow Bob to withdraw his funds' now correctly checks Bob's account balance as well as his splitter balance after withdrawing funds
