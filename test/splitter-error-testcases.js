@@ -15,19 +15,17 @@ contract("Splitter Error Test", async accounts => {
     let ZERO_ADDRESS;
 
     // Runs before all tests in this block.
-    before(async () => {
-        console.log('set up accounts before all tests');
-        
+    before("setting up test data", async () => {
         //Set up accounts for parties.
         [owner,alice,bob,carol,dan] = accounts; 
         ZERO_ADDRESS =  '0x0000000000000000000000000000000000000000';
 
+        assert.isAtLeast(accounts.length,5);
+
     });
 
-    beforeEach(async () => {
-       console.log('create instance before each test case');
-       instance = await Splitter.new({from: owner});
-       console.log("instance address",instance.address);
+    beforeEach("deploying new instance", async () => {
+       instance = await Splitter.new({ from: owner });
     });
    
     it('should revert when the fallback function is called', async () => {
@@ -41,10 +39,10 @@ contract("Splitter Error Test", async accounts => {
     });
     
     it('should not allow a function to be carried out if the contract is paused', async () => {
-        await instance.pause({from: owner});
+        await instance.pause({ from: owner });
       
         await truffleAssert.reverts(
-            instance.split(bob, carol, {from: alice, value: 5000} ),
+            instance.split(bob, carol, { from: alice, value: 5000 } ),
             "Pausable: paused"
         );
 
@@ -61,7 +59,7 @@ contract("Splitter Error Test", async accounts => {
 
     it('should not allow a party without a contract balance to withdraw funds', async () => {
         //Make sure bob, carol, and alice have funds
-        await instance.split(bob, carol, {from: alice, value: 5001} );
+        await instance.split(bob, carol, { from: alice, value: 5001}  );
 
         //someone else tries to withdraw funds
         await truffleAssert.reverts(
@@ -77,7 +75,7 @@ contract("Splitter Error Test", async accounts => {
 
     it('should not allow funds to be sent to invalid receiver addresses', async () => {
         await truffleAssert.reverts(
-            instance.split(ZERO_ADDRESS, ZERO_ADDRESS, {from: alice, value: 5001} ),
+            instance.split(ZERO_ADDRESS, ZERO_ADDRESS, { from: alice, value: 5001 } ),
             "Receiver is the zero address"
         ); 
     });

@@ -9,11 +9,10 @@ contract Splitter is Ownable, Pausable {
     using SafeMath for uint256;
  
     
-    mapping(address => uint256) public _balances;
+    mapping(address => uint256) public balances;
 
-    event DepositReceived(address indexed depositor, uint256 amount);
-    event FundsSplit(address indexed sender, address receiver1, address receiver2,  uint256 amountReceived, uint256 remainingAmountToSender);
-    event FundsWithdrawn(address indexed party, uint256 balanceWithdrawn);
+    event LogFundsSplit(address indexed sender, address receiver1, address receiver2,  uint256 amountReceived, uint256 remainingAmountToSender);
+    event LogFundsWithdrawn(address indexed party, uint256 balanceWithdrawn);
    
     constructor() public {}
 
@@ -28,17 +27,17 @@ contract Splitter is Ownable, Pausable {
         uint256 half = msg.value.div(2);
         uint256 remainder = msg.value.mod(2);
 
-        _balances[receiver1] = _balances[receiver1].add(half);
-        _balances[receiver2] = _balances[receiver2].add(half);
-        _balances[msg.sender] = SafeMath.add(_balances[msg.sender],remainder);
-        emit FundsSplit(msg.sender, receiver1, receiver2, half, remainder);
+        balances[receiver1] = balances[receiver1].add(half);
+        balances[receiver2] = balances[receiver2].add(half);
+        balances[msg.sender] = balances[msg.sender].add(remainder);
+        emit LogFundsSplit(msg.sender, receiver1, receiver2, half, remainder);
     }
 
     function withdrawFunds() public whenNotPaused {
-        uint256 amount = _balances[msg.sender];
+        uint256 amount = balances[msg.sender];
         require(amount > 0, "No funds available for withdrawal");
-        _balances[msg.sender] = 0;
-        emit FundsWithdrawn(msg.sender,amount);
+        balances[msg.sender] = 0;
+        emit LogFundsWithdrawn(msg.sender,amount);
         msg.sender.transfer(amount);
     }
 }
