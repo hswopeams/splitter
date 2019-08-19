@@ -11,7 +11,7 @@ contract Splitter is Ownable, Pausable {
     
     mapping(address => uint256) public balances;
 
-    event LogFundsSplit(address indexed sender, address receiver1, address receiver2,  uint256 amountReceived, uint256 remainingAmountToSender);
+    event LogFundsSplit(address indexed sender, address indexed receiver1, address indexed receiver2,  uint256 amountReceived, uint256 remainingAmountToSender);
     event LogFundsWithdrawn(address indexed party, uint256 balanceWithdrawn);
    
     constructor() public {}
@@ -37,7 +37,7 @@ contract Splitter is Ownable, Pausable {
         uint256 amount = balances[msg.sender];
         require(amount > 0, "No funds available for withdrawal");
         balances[msg.sender] = 0;
-        emit LogFundsWithdrawn(msg.sender,amount);
+        emit LogFundsWithdrawn(msg.sender, amount);
         msg.sender.transfer(amount);
     }
 }

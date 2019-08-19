@@ -29,7 +29,7 @@ contract("Splitter Happy Flow Test", async accounts => {
     
    it('should have starting balance of 0', async () => {
         const contractBalance = await web3.eth.getBalance(instance.address);
-        assert.equal(contractBalance, 0),"contract balance isn't 0";
+        assert.strictEqual(contractBalance, '0',"contract balance isn't 0");
     });
 
     it('should allow owner to pause and unpause the contract', async () => {
@@ -38,35 +38,38 @@ contract("Splitter Happy Flow Test", async accounts => {
         assert.isTrue(paused, 'the contract is paused');
 
         truffleAssert.eventEmitted(txObj.receipt, 'Paused', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
             return ev.account == owner;
         });
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
        
         await instance.unpause({ from: owner });
         paused = await instance.paused();
         assert.isFalse(paused, 'the contract is nnot paused');
 
-        truffleAssert.eventEmitted(txObj.receipt, 'Paused', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
+        truffleAssert.eventEmitted(txObj.receipt, 'Paused', (ev) => {  
             return ev.account == owner;
         });
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
 
 
     it('should allow all parties to get their balances', async () => {
         const balanceAlice = await instance.balances(alice, { from: alice });
-        assert.equal(balanceAlice, 0),"alice's contract balance isn't 0";
+        assert.equal(balanceAlice, 0, "alice's contract balance isn't 0");
+       
 
         const balanceBob = await instance.balances(bob, { from: bob });
-        assert.equal(balanceBob, 0),"bob's contract balance isn't 0";
+        assert.equal(balanceBob, 0, "bob's contract balance isn't 0");
           
         const balanceCarol = await instance.balances(carol, { from: carol } );
-        assert.equal(balanceCarol, 0),"carol's contract balance isn't 0";
+        assert.equal(balanceCarol, 0, "carol's contract balance isn't 0");
     });
 
     it('should allow a party to get another party\'s balance', async () => {
         const balanceAlice = await instance.balances(alice, { from: bob });
-        assert.equal(balanceAlice, 0),"alice's contract balance isn't 0";
+        assert.equal(balanceAlice, 0,"alice's contract balance isn't 0");
     });
 
     
@@ -87,12 +90,13 @@ contract("Splitter Happy Flow Test", async accounts => {
  
         expect(newBalanceAlice.eq(expectedAlice)).to.be.true;  
         expect(newBalanceBob.eq(expectedBob)).to.be.true;  
-        expect(newBalanceCarol.eq(expectedCarol)).to.be.true;  
+        expect(newBalanceCarol.eq(expectedCarol)).to.be.true;
 
         truffleAssert.eventEmitted(txObj.receipt, 'LogFundsSplit', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
             return ev.sender == alice && ev.receiver1 == bob && ev.receiver2 == carol && ev.amountReceived == 2500 && ev.remainingAmountToSender == 0;
         });  
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
 
   
@@ -118,10 +122,11 @@ contract("Splitter Happy Flow Test", async accounts => {
         expect(newBalanceBob.eq(expectedBob)).to.be.true;  
         expect(newBalanceCarol.eq(expectedcCarol)).to.be.true;  
 
-        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsSplit', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
+        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsSplit', (ev) => {    
             return ev.sender == alice && ev.receiver1 == bob && ev.receiver2 == carol && ev.amountReceived == 2500 && ev.remainingAmountToSender == 1;
         });    
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
               
     });
 
@@ -147,9 +152,10 @@ contract("Splitter Happy Flow Test", async accounts => {
         expect(newBalanceFrank.eq(expectedFrank)).to.be.true;  
 
         truffleAssert.eventEmitted(txObj.receipt, 'LogFundsSplit', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
             return ev.sender == dan && ev.receiver1 == ellen && ev.receiver2 == frank && ev.amountReceived == 2500;
         });         
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
 
    
@@ -172,10 +178,11 @@ contract("Splitter Happy Flow Test", async accounts => {
         const newSplitterBalanceAlice = await instance.balances(alice, { from: alice });
         expect(newSplitterBalanceAlice.eq(expectedSplitterBalance)).to.be.true; 
 
-        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsWithdrawn', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
+        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsWithdrawn', (ev) => {    
             return ev.party == alice && ev.balanceWithdrawn == 1 ;
         });   
+
+        assert.equal(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
     
     it('should allow bob to withdraw his funds', async () => {
@@ -197,10 +204,11 @@ contract("Splitter Happy Flow Test", async accounts => {
         const newSplitterBalanceBob = await instance.balances(bob, { from: bob });
         expect(newSplitterBalanceBob.eq(expectedSplitterBalance)).to.be.true; 
 
-        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsWithdrawn', (ev) => {
-            assert.equal(txObj.receipt.logs.length, '1', 'Incorrect number of events emitted');
+        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsWithdrawn', (ev) => { 
             return ev.party == bob && ev.balanceWithdrawn == 2500 ;
         }); 
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
 
 });//end test contract
