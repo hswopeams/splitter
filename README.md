@@ -9,7 +9,6 @@ B9Lab Splitter Project
 5. Alice can use the Web page to split her ether.
 
 ## Notes
-* Contract only. Does not include web page. I will do Module 6 first and then build the web page, as mentioned in the instructions.
 * Simplified Splitter.sol as per comments
 * Alice, Bob, and Carol are used as test accounts, but as per comments it is possible for anyone to split or receive.
 * The split function is also tested with Dan, Ed, and Frank
@@ -17,3 +16,4 @@ B9Lab Splitter Project
 * The test case 'should allow Alice to withdraw her funds' now correctly checks Alice's account balance as well as her splitter balance after withdrawing funds
 * The test case 'should allow Bob to withdraw his funds' now correctly checks Bob's account balance as well as his splitter balance after withdrawing funds
 * Made changes according to Xavier's comments
+*Added GUI
