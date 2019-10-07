@@ -6,3 +6,10 @@ contracts/Splitter-Parties.sol.bak
 contracts/Splitter-almost.sol.bak
 contracts/Splitter-names.sol.bak
 test/splitter-almost.js.bak
+contracts/Splitter-initial-commit.sol.bak
+contracts/Splitter.sol.copy
+migrations/2_deploy_contracts.js.copy
+test/.DS_Store
+test/splitter-happyflow-testcases.js.initial
+test/splitter-error-testcases.js.copy
+test/splitter-happyflow-testcases.js.copy

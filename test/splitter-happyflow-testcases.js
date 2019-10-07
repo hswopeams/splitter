@@ -15,7 +15,7 @@ contract("Splitter Happy Flow Test", async accounts => {
   
     // Runs before all tests in this block.
     before("setting up test data", async () => {
-        //Set up accounts for parties. In truffel owner = owner
+        //Set up accounts for parties. In truffel owner = accounts[0]
         [owner,alice,bob,carol,dan,ellen,frank] = accounts; 
 
         assert.isAtLeast(accounts.length,5);

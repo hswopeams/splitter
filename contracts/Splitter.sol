@@ -5,7 +5,7 @@ import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-contract Splitter is Ownable, Pausable {
+contract Splitter is Pausable {
     using SafeMath for uint256;
  
     
