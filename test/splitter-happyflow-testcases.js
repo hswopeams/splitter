@@ -211,4 +211,30 @@ contract("Splitter Happy Flow Test", async accounts => {
         assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
     });
 
+    it('should allow public variables to be retrieved', async () => {
+        const expectedSplitterBalance = new BN(0);
+       
+        //add some funds to Bob's splitter balance first
+        await instance.split(bob, carol, { from: alice, value: 5001 } );
+        
+        const startingAccountBalanceBob = new BN(await web3.eth.getBalance(bob));
+        const txObj = await instance.withdrawFunds({ from: bob });
+        const withdrawGasPrice = (await web3.eth.getTransaction(txObj.tx)).gasPrice;
+        const withdrawTxPrice = withdrawGasPrice * txObj.receipt.gasUsed;
+        newAccountBalanceBob = new BN(await web3.eth.getBalance(bob));
+
+        //Bob's balance after calling withdrawFunds() = Bob's balance before calling withdrawFunds() plus amount withdrawn minus price of calling withdrawFunds()
+        const expectedAccountBalance = startingAccountBalanceBob.add(new BN(2500)).sub(new BN(withdrawTxPrice));       
+        expect(new BN(newAccountBalanceBob).eq(new BN(expectedAccountBalance))).to.be.true; 
+
+        const newSplitterBalanceBob = await instance.balances(bob, { from: bob });
+        expect(newSplitterBalanceBob.eq(expectedSplitterBalance)).to.be.true; 
+
+        truffleAssert.eventEmitted(txObj.receipt, 'LogFundsWithdrawn', (ev) => { 
+            return ev.party == bob && ev.balanceWithdrawn == 2500 ;
+        }); 
+
+        assert.strictEqual(txObj.receipt.logs.length, 1, 'Incorrect number of events emitted');
+    });
+
 });//end test contract
