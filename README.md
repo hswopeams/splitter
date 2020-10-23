@@ -1,5 +1,5 @@
 # splitter
-B9Lab Splitter Project
+B9Lab Academy Splitter Project
 
 ## Functional Requirements
 1. there are 3 people: Alice, Bob and Carol.
