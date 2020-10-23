@@ -1,11 +1,11 @@
 # splitter
-B9Lab Splitter Project
+B9Lab Academy Splitter Project
 
 ## Functional Requirements
-1. there are 3 people: Alice, Bob and Carol.
-2. we can see the balance of the Splitter contract on the Web page.
-3. whenever Alice sends ether to the contract for it to be split, half of it goes to Bob and the other half to Carol.
-4. we can see the balances of Alice, Bob and Carol on the Web page.
+1. There are 3 people: Alice, Bob and Carol.
+2. We can see the balance of the Splitter contract on the Web page.
+3. Whenever Alice sends ether to the contract for it to be split, half of it goes to Bob and the other half to Carol.
+4. We can see the balances of Alice, Bob and Carol on the Web page.
 5. Alice can use the Web page to split her ether.
 
 ## Notes
