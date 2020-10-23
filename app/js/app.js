@@ -1,3 +1,6 @@
+// Import the page's CSS. Webpack will know what to do with it.
+import "../styles/app.css";
+
 const Web3 = require("web3");
 const Promise = require("bluebird");
 const truffleContract = require("truffle-contract");
@@ -31,7 +34,6 @@ window.addEventListener('load', async function() {
        // window.account = accounts[0];
         //console.log("Account:", window.account);
         const network = await web3.eth.net.getId();
-        console.log("Network:", network.toString(10));
         const deployed = await Splitter.deployed();
 
         //Set up Alice
@@ -65,7 +67,7 @@ window.addEventListener('load', async function() {
 const split = async function() {
     // Sometimes you have to force the gas amount to a value you know is enough because
     // `web3.eth.estimateGas` may get it wrong.
-    console.log("inside split");
+   
     const gas = 300000;
     try {
         const accounts = await (/*window.ethereum ?
@@ -107,7 +109,7 @@ const split = async function() {
             );
         // Now we got the mined tx.
         const receipt = txObj.receipt;
-        console.log("got receipt", receipt);
+        
         if (!receipt.status) {
             console.error("Wrong status");
             console.error(receipt);
@@ -139,8 +141,6 @@ const split = async function() {
 const withdrawFunds = async function() {
     // Sometimes you have to force the gas amount to a value you know is enough because
     // `web3.eth.estimateGas` may get it wrong.
-    console.log("Inside withdrawFunds");
-
     
     const gas = 300000;
     try {
@@ -178,7 +178,7 @@ const withdrawFunds = async function() {
             );
         // Now we got the mined tx.
         const receipt = txObj.receipt;
-        console.log("got receipt", receipt);
+       
         if (!receipt.status) {
             console.error("Wrong status");
             console.error(receipt);

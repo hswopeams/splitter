@@ -1,27 +1,30 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
-<title>Splitter GUI</title>
-<meta charset="utf-8">
-
-
-
-
+    <title>Splitter GUI</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
 </head>
 <body>
+    <h1>Splitter</h1>
     <div>Alice has <span id="balanceAlice">Loading...</span> Wei in Splitter funds.</div>
     <div>Bill has <span id="balanceBill">Loading...</span> Wei in Splitter funds.</div>
     <div>Carol has <span id="balanceCarol">Loading...</span> Wei in Splitter funds.</div>
-    <div>
-        Split <input name="amount" type="number" placeholder="0" /> Wei
-        to <input name="receiver1" type="text" placeholder="0x0011223344556677889900112233445566778899" /> and <input name="receiver2" type="text" placeholder="0x0011223344556677889900112233445566778899" />
-        <button id="split">Split</button>.
-    </div>
-    <div>
-        Withdraw Funds<input name="account" type="text" placeholder="0x0011223344556677889900112233445566778899" /> 
-        <button id="withdraw">Withdraw</button>.
-    </div>
-    <div id="status"></div>
+    <br><br>
+
+   
+    <h2>Split Funds</h2>
+    <br><label for="amount">Split:</label><input name="amount" type="number" placeholder="0" /> Wei
+    <br><br><label for="receive1">To:</label> <input name="receiver1" type="text" placeholder="0x0011223344556677889900112233445566778899" /> and <input name="receiver2" type="text" placeholder="0x0011223344556677889900112233445566778899" />
+    <br><br><button id="split">Split</button>
+    <br><br>
+
+    
+    <h2>Withdraw Funds</h2>
+    <br><label for="account">Withdraw Funds:</label><input name="account" type="text" placeholder="0x0011223344556677889900112233445566778899" /> 
+    <br><br><button id="withdraw">Withdraw</button>
+    
+    <br><br><div id="status"></div>
 
 <script src="js/app.js"></script>
 
