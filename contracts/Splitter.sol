@@ -18,7 +18,7 @@ contract Splitter is Pausable {
 
     function() external {
         revert("Falback function not available");
-     }
+    }
 
 
     function split(address receiver1, address receiver2) public payable whenNotPaused {
