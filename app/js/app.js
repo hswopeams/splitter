@@ -33,7 +33,6 @@ window.addEventListener('load', async function() {
             window.enable() ||*/
             web3.eth.getAccounts());
         if (accounts.length == 0) {
-            $("#balance").html("N/A");
             throw new Error("No account with which to transact");
         }
       
