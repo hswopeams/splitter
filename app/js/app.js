@@ -53,6 +53,11 @@ window.addEventListener('load', async function() {
         console.log("Carol:", carol);
         let balanceCarol = await deployed.balances(carol, { from: carol });
         $("#balanceCarol").html(balanceCarol.toString(10));
+        
+
+        //Show Contract balance
+        let balanceContract = await window.web3.eth.getBalance(deployed.address);
+        $("#balanceContract").html(balanceContract.toString(10));
        
         // We wire it when the system looks in order.
         $("#split").click(split);
@@ -131,6 +136,9 @@ const split = async function() {
 
         let balanceCarol = await deployed.balances(carol, { from: carol });
         $("#balanceCarol").html(balanceCarol.toString(10));
+
+        let balanceContract = await window.web3.eth.getBalance(deployed.address);
+        $("#balanceContract").html(balanceContract.toString(10));
        
     } catch(err) {
         $("#status").html(err.toString());
@@ -201,6 +209,9 @@ const withdrawFunds = async function() {
 
         let balanceCarol = await deployed.balances(carol, { from: carol });
         $("#balanceCarol").html(balanceCarol.toString(10));
+
+        let balanceContract = await window.web3.eth.getBalance(deployed.address);
+        $("#balanceContract").html(balanceContract.toString(10));
         
     } catch(err) {
         $("#status").html(err.toString());
