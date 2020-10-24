@@ -1,4 +1,4 @@
-# splitter
+# Splitter
 B9lab Academy Project 1
 
 This was the first project I developed for the B9lab Academy Ethereum Developer Course. It consists of a simple Splitter contract that allows Alice to split funds between Bill and Carol.
