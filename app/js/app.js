@@ -22,6 +22,11 @@ const Splitter = truffleContract(splitter);
 Splitter.setProvider(web3.currentProvider);
 
 
+let alice;
+let bill;
+let carol;
+
+
 window.addEventListener('load', async function() {
     try {
         const accounts = await (/*window.ethereum ?
@@ -31,28 +36,27 @@ window.addEventListener('load', async function() {
             $("#balance").html("N/A");
             throw new Error("No account with which to transact");
         }
-       // window.account = accounts[0];
-        //console.log("Account:", window.account);
+      
         const network = await web3.eth.net.getId();
         const deployed = await Splitter.deployed();
 
         //Set up Alice
-        const alice = accounts[1];
-        console.log("Alice:", alice);
+        alice = accounts[1];
         let balanceAlice = await deployed.balances(alice, { from: alice });
         $("#balanceAlice").html(balanceAlice.toString(10));
+        $("#addressAlice").html(alice);
 
         //Set up Bill
-        const bill = accounts[2];
-        console.log("Bill:", bill);
+        bill = accounts[2];
         let balanceBill = await deployed.balances(bill, { from: bill });
         $("#balanceBill").html(balanceBill.toString(10));
+        $("#addressBill").html(bill);
 
         //Set up Carol
-        const carol = accounts[3];
-        console.log("Carol:", carol);
+        carol = accounts[3];
         let balanceCarol = await deployed.balances(carol, { from: carol });
         $("#balanceCarol").html(balanceCarol.toString(10));
+        $("#addressCarol").html(carol);
         
 
         //Show Contract balance
@@ -84,15 +88,12 @@ const split = async function() {
         }
 
         const deployed = await Splitter.deployed();
-        const alice = accounts[1];
-        const bill = accounts[2];
-        const carol = accounts[3];
 
         // We simulate the real call and see whether this is likely to work.
         // No point in wasting gas if we have a likely failure.
         const success = await deployed.split.call(
-            $("input[name='receiver1']").val(),
-            $("input[name='receiver2']").val(),
+            bill,
+            carol,
             // Giving a string is fine
             { from: alice, value: $("input[name='amount']").val(), gas: gas });
 
@@ -102,8 +103,8 @@ const split = async function() {
 
         // Ok, we move onto the proper action.
         const txObj = await deployed.split(
-            $("input[name='receiver1']").val(),
-            $("input[name='receiver2']").val(),
+            bill,
+            carol,
             // Giving a string is fine
             { from: alice, value: $("input[name='amount']").val(), gas: gas })
             //split takes time in real life, so we get the txHash immediately while it 
@@ -161,11 +162,8 @@ const withdrawFunds = async function() {
         }
 
         const deployed = await Splitter.deployed();
-        const alice = accounts[1];
-        const bill = accounts[2];
-        const carol = accounts[3];
 
-         // We simulate the real call and see whether this is likely to work.
+        // We simulate the real call and see whether this is likely to work.
         // No point in wasting gas if we have a likely failure.
         const success = await deployed.withdrawFunds.call(
             // Giving a string is fine
