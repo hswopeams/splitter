@@ -15,8 +15,10 @@ I'm not a front-end developer, so the GUI is very simple. It serves only to show
 4. We can see the balances of Alice, Bob and Carol on the Web page.
 5. Alice can use the Web page to split her ether.
 6. Bob and Carol can withdraw their balances.
+7. Ownership of the contract can be transferred. 
+8. The contract can be paused and killed.
 
-## How to Run
+## How to run locally
 1. Clone this respository
 2. CD to the `splitter` directory
 3. Run `npm install`
@@ -29,4 +31,5 @@ I'm not a front-end developer, so the GUI is very simple. It serves only to show
 10. Fill in a Wei amount and click `Split`
 11. Notice the balances increasing
 12. To withdraw funds, fill in Bill or Alice's address anc click `Withdraw`
+
 
